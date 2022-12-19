@@ -34,4 +34,6 @@ ekoAPI.verifyPAN({
 
 ## Resources
 
-- [Eko Developers Community](http://dsc.gg/ekodevs)
+- [Eko Developers Community](https://github.com/ekoindia/eko-dev-community)
+- [Discord](http://dsc.gg/ekodevs)
+- [YouTube](https://www.youtube.com/@ekodevelopers)

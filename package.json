@@ -1,0 +1,25 @@
+{
+  "name": "@ekoindia/eko-sdk-node",
+  "version": "0.1.0",
+  "description": "Access all financial services with simple to use APIs and SDK",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ekoindia/eko-sdk-node.git"
+  },
+  "keywords": [
+    "financial-services",
+    "fintech-api",
+    "fintech",
+    "banking"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ekoindia/eko-sdk-node/issues"
+  },
+  "homepage": "https://github.com/ekoindia/eko-sdk-node#readme"
+}

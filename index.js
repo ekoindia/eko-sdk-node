@@ -14,7 +14,8 @@ let EKO_API_CONFIGS = {
  */
 const Eko = {
     init: init,
-    verifyPAN: verifyPAN
+    verifyPAN: verifyPAN,
+    verifyBankAccount: verifyBankAccount
 }
 
 /**
@@ -48,8 +49,19 @@ function init(configs){
  * @param {Object} options { panNumber: number, purpose: string, purposeDescription: string }
  */
 function verifyPAN(options, cb){
-    kyc.verifyPAN(EKO_API_CONFIGS, options);
+    kyc.verifyPAN(EKO_API_CONFIGS, options, function(err, result){
+        return cb(err, result)
+    });
 }
 
+/**
+ * Verify Bank account details
+ * @param {Object} options { accountNo, ifsc or bankCode, customerId, userCode }
+ */
+function verifyBankAccount(options, cb){
+    kyc.verifyBankAccount(EKO_API_CONFIGS, options, function(err, result){
+        return cb(err, result)
+    });
+}
 
 module.exports = Eko;

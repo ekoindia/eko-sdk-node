@@ -36,6 +36,20 @@ ekoAPI.verifyPAN({
     panNumber: 'pan number',
     purpose: 'purpose of verification',
     purposeDescription: 'description of the purpose'
+}, function(err, result){
+    console.log(JSON.stringify(result));
+})
+```
+
+```
+//How to verify Bank account
+ekoApi.verifyBankAccount({ 
+    accountNo: '12313897932', 
+    ifsc: 'SBIN02349D', 
+    customerId: 4315453, 
+    userCode: 12345 
+}, (err, result) => { 
+    console.log(JSON.stringify(result));
 })
 ```
 

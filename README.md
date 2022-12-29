@@ -8,9 +8,16 @@ Have any questions/suggestions? Share in the [Discord community](http://dsc.gg/e
 
 ## Getting started
 
+### Install the package
+
+```
+npm install @ekoindia/eko-sdk-node
+```
 
 ### Initialize the SDK
+
 ```
+const Eko = require('@ekoindia/eko-sdk-node')
 const ekoAPI = Eko.init({
     hostname: "eko.in",
     port: 443,

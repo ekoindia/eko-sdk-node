@@ -30,6 +30,15 @@ function activatePANApi(apiConfigs, cb) {
  * @param {Object} apiConfigs An object containing the API configuration details.
  * @param {Object} options { panNumber: number, purpose: string, purposeDescription: string }
  * @param {function} cb A callback function to handle the response from the server
+ * @param {Error} cb.err - An error object, if an error occurred.
+ * @param {Object} cb.data - The JSON response from the server
+ *  {
+        "pan_number": "...XXX",
+        "last_name": "Foo",
+        "middle_name": "",
+        "title": "Shri",
+        "first_name": "Bar"
+    }
  */
 function verifyPAN(apiConfigs, options, cb) {
     const data = Object.assign({
@@ -42,7 +51,23 @@ function verifyPAN(apiConfigs, options, cb) {
         path: '/ekoapi/v1/pan/verify',
         method: 'POST'
     }, data, function(err, resultJson){
-        cb(err, resultJson);
+        /**
+         * On success i.e. 200 status
+         * {
+                "response_status_id": -1,
+                "data": {
+                    "pan_number": "...XXX",
+                    "last_name": "Foo",
+                    "middle_name": "",
+                    "title": "Shri",
+                    "first_name": "Bar"
+                },
+                "response_type_id": 1255,
+                "message": "PAN verification successful",
+                "status": 0
+            }
+         */
+        cb(err, resultJson ? resultJson.data : null);
     })
 }
 
@@ -59,7 +84,23 @@ function verifyPAN(apiConfigs, options, cb) {
  * @param {string} options.userCode - User code value of the retailer from whom the request is coming.
  * @param {function} cb - A callback function to handle the response from the server.
  * @param {Error} cb.err - An error object, if an error occurred.
- * @param {Object} cb.resultJson - The JSON response from the server.
+ * @param {Object} cb.data - The JSON response from the server.
+ *  { 
+        "amount": "1.0",
+        "fee": "7.00",
+        "verification_failure_refund": "7.00",
+        "is_Ifsc_required": "0",
+        "tid": "2157012435",
+        "client_ref_id": "AVS20181123194719311",
+        "bank": "Kotak Mahindra Bank",
+        "is_name_editable": "1",
+        "user_code": "20810200",
+        "aadhar": "",
+        "recipient_name": "Unknown",
+        "ifsc": "",
+        "account": "1711654128"
+    }
+ * 
  */
 function verifyBankAccount(apiConfigs, options, cb){
     if(!options || (!options.ifsc && !options.bankCode)){
@@ -78,6 +119,30 @@ function verifyBankAccount(apiConfigs, options, cb){
         path: '/ekoapi/v2/banks/'+(options.ifsc ? 'ifsc:'+options.ifsc : 'bank_code:'+ options.bankCode) +'/accounts/'+options.accountNo,
         method: 'POST'
     }, data, function(err, resultJson){
-        cb(err, resultJson);
+        /**
+         * On success i.e. 200 status
+         * {
+            "response_status_id": -1,
+            "data": {
+                "amount": "1.0",
+                "fee": "7.00",
+                "verification_failure_refund": "7.00",
+                "is_Ifsc_required": "0",
+                "tid": "2157012435",
+                "client_ref_id": "AVS20181123194719311",
+                "bank": "Kotak Mahindra Bank",
+                "is_name_editable": "1",
+                "user_code": "20810200",
+                "aadhar": "",
+                "recipient_name": "Unknown",
+                "ifsc": "",
+                "account": "1711654128"
+            },
+            "response_type_id": 61,
+            "message": "The bank did not share the recipient name this time.",
+            "status": 0
+            }
+         */
+        cb(err, resultJson ? resultJson.data : null);
     });
 }

@@ -10,19 +10,30 @@ function send(apiConfigs, reqOptions, data, cb){
     let defaultRequestOptions = createDefaultRequestOptions(apiConfigs);
     //Override default request options if needed
     let finalRequestOptions = Object.assign(defaultRequestOptions, reqOptions);
+    console.debug("Request OPTIONS: ")
+    console.debug(JSON.stringify(finalRequestOptions));
     const req = https.request(finalRequestOptions, (res) => {
-        console.log(`statusCode: ${res.statusCode}`);
-        let result = [];
+        res.setEncoding('utf8');
+        console.debug('Response STATUS: ' + res.statusCode);
+        console.debug('Response HEADERS: ' + JSON.stringify(res.headers));
+        let result = '';
         res.on('data', chunk => {
-            result.push(chunk);
+            result = result + chunk;
         });
         res.on('end', () => {
-            console.log('Response ended: ');
-            const finalResult = JSON.parse(Buffer.concat(result).toString());
-            cb(null, finalResult);
+            console.debug('Response RESULT: ');
+            console.debug(result)
+            try{
+                const finalResult = JSON.parse(result);
+                cb(null, finalResult);
+            } catch(err){
+                cb(err, null);
+            }
         });
     });
     if(data){
+        console.debug("Posting data: ")
+        console.debug(JSON.stringify(data))
         req.write(JSON.stringify(data));
     }
     req.end();
@@ -44,7 +55,8 @@ function createDefaultRequestOptions(apiConfigs){
         headers: {
             'developer_key': apiConfigs.developerKey,
             'secret-key': authKeys.secretKey,
-            'secret-key-timestamp': authKeys.secretKeyTimestamp
+            'secret-key-timestamp': authKeys.secretKeyTimestamp,
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
     };
 }

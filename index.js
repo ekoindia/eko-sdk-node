@@ -47,6 +47,8 @@ function init(configs){
 /**
  * Verify PAN details
  * @param {Object} options { panNumber: number, purpose: string, purposeDescription: string }
+ * @param {Error} cb.err - An error object, if an error occurred.
+ * @param {Object} cb.data - { "pan_number", "title", "first_name", "middle_name", "last_name" }
  */
 function verifyPAN(options, cb){
     kyc.verifyPAN(EKO_API_CONFIGS, options, function(err, result){
@@ -57,6 +59,9 @@ function verifyPAN(options, cb){
 /**
  * Verify Bank account details
  * @param {Object} options { accountNo, ifsc or bankCode, customerId, userCode }
+ * @param {function} cb - A callback function to handle the response from the server.
+ * @param {Error} cb.err - An error object, if an error occurred.
+ * @param {Object} cb.data - { "amount", "fee","verification_failure_refund", "is_Ifsc_required", "tid", "client_ref_id", "bank", "is_name_editable", "user_code", "aadhar", "recipient_name", "ifsc", "account" }
  */
 function verifyBankAccount(options, cb){
     kyc.verifyBankAccount(EKO_API_CONFIGS, options, function(err, result){

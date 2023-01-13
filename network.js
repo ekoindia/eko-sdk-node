@@ -32,9 +32,18 @@ function send(apiConfigs, reqOptions, data, cb){
         });
     });
     if(data){
-        console.debug("Posting data: ")
-        console.debug(JSON.stringify(data))
-        req.write(JSON.stringify(data));
+        console.debug("Posting data: ");
+        console.debug(JSON.stringify(data));
+        let encodedData = "";
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                if (encodedData !== "") encodedData += "&";
+                encodedData += encodeURIComponent(key) + "=" + encodeURIComponent(data[key]);
+            }
+        }
+        console.debug("Encoded data for : ");
+        console.debug(encodedData);
+        req.write(encodedData);
     }
     req.end();
     req.on('error', (error) => {
@@ -51,7 +60,7 @@ function createDefaultRequestOptions(apiConfigs){
     let authKeys = auth.getAuthKeys(apiConfigs.authKey);
     return {
         hostname: apiConfigs.hostname,
-        port: apiConfigs.port,
+        port: apiConfigs.port || 443,
         headers: {
             'developer_key': apiConfigs.developerKey,
             'secret-key': authKeys.secretKey,

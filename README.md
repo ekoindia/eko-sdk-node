@@ -2,6 +2,12 @@
 
 Node.js SDK for [Eko APIs](https://developers.eko.in)
 
+
+[![npm version](https://badge.fury.io/js/@ekoindia%2Feko-sdk-node.svg)](https://badge.fury.io/js/@ekoindia%2Feko-sdk-node) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/ekoindia/eko-sdk-node/issues)
+
+[![https://nodei.co/npm/@ekoindia/eko-sdk-node.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/@ekoindia/eko-sdk-node.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/@ekoindia/eko-sdk-node)
+
+
 **Warning: This is not yet ready to use in production**
 
 Have any questions/suggestions? Share in the [Discord community](http://dsc.gg/ekodevs)

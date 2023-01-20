@@ -6,7 +6,9 @@ let EKO_API_CONFIGS = {
     port: 25004,
     developerKey: "becbbce45f79c6f5109f848acd540567",
     authKey: "f74c50a1-f705-4634-9cda-30a477df91b7",
-    initiatorId: "9971771929"
+    initiatorId: "9971771929",
+    partnerUserCode: "20110001" //unique Eko code provided for your org
+    // initiatorId: "9962981729"
 }
 
 /**
@@ -38,7 +40,7 @@ function init(configs){
     kyc.activatePANApi(EKO_API_CONFIGS, function(err, result){
         if(err){
             console.debug(err)
-            throw new Error("Error in enabling PAN verification API");
+            // throw new Error("Error in enabling PAN verification API"); 
         }
     });
     return Eko;
@@ -47,7 +49,7 @@ function init(configs){
 /**
  * Verify PAN details
  * @param {Object} options { panNumber: number, purpose: string, purposeDescription: string }
- * @param {Error} cb.err - An error object, if an error occurred.
+ * @param {Error} cb.err - An error object, if an error occurred. { statusCode, statusMessage }
  * @param {Object} cb.data - { "pan_number", "title", "first_name", "middle_name", "last_name" }
  */
 function verifyPAN(options, cb){
@@ -60,7 +62,7 @@ function verifyPAN(options, cb){
  * Verify Bank account details
  * @param {Object} options { accountNo, ifsc or bankCode, customerId, userCode }
  * @param {function} cb - A callback function to handle the response from the server.
- * @param {Error} cb.err - An error object, if an error occurred.
+ * @param {Error} cb.err - An error object, if an error occurred. { statusCode, statusMessage }
  * @param {Object} cb.data - { "amount", "fee","verification_failure_refund", "is_Ifsc_required", "tid", "client_ref_id", "bank", "is_name_editable", "user_code", "aadhar", "recipient_name", "ifsc", "account" }
  */
 function verifyBankAccount(options, cb){

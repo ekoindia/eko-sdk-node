@@ -15,7 +15,7 @@ function activatePANApi(apiConfigs, cb) {
     const data = Object.assign({
         service_code: 4,
         initiator_id: apiConfigs.initiatorId,
-        user_code: apiConfigs.userCode
+        user_code: apiConfigs.partnerUserCode
     });
     network.send(apiConfigs, {
         path: '/ekoapi/v1/user/service/activate',
@@ -110,7 +110,7 @@ function verifyBankAccount(apiConfigs, options, cb){
         return cb({ errorMessage: 'Must provide account number that needs to be verified', errorCode: 'VALIDATION_ERROR' })
     }
     const data = Object.assign({
-        initiator_id: apiConfigs.initiatorId
+        initiator_id: options.initiatorId || apiConfigs.initiatorId
     });
     data['customer_id'] = options.customerId;
     // data['client_ref_id'] = options.clientReferenceId;

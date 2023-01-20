@@ -21,11 +21,16 @@ function send(apiConfigs, reqOptions, data, cb){
             result = result + chunk;
         });
         res.on('end', () => {
+            console.debug('STATUS: '+res.statusCode);
             console.debug('Response RESULT: ');
-            console.debug(result)
-            try{
-                const finalResult = JSON.parse(result);
-                cb(null, finalResult);
+            console.debug(result);
+            try {
+                if(res.statusCode === 200){
+                    const finalResult = JSON.parse(result);
+                    cb(null, finalResult);
+                } else {
+                    cb({ statusCode: res.statusCode, statusMessage: result }, null)
+                }
             } catch(err){
                 cb(err, null);
             }

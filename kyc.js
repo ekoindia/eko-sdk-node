@@ -4,8 +4,26 @@
 exports.activatePANApi = activatePANApi;
 exports.verifyPAN = verifyPAN;
 exports.verifyBankAccount = verifyBankAccount;
+exports.isPANServiceActive = isPANServiceActive;
 
 const network = require('./network');
+const services = require('./services');
+
+/**
+ * @param {Object} apiConfigs 
+ * @param {*} cb fn(err, isActive)
+ */
+function isPANServiceActive(apiConfigs, cb) {
+    services.getServiceStatus(apiConfigs, null, function(err, statusReponse){
+        if(statusReponse && statusReponse.service_status_list && statusReponse.length>0){
+            const statusObject = statusReponse.service_status_list.find((serviceStatusObject) => serviceStatusObject.service_code === "4");
+            if(statusObject && statusObject.status_desc && statusObject.status_desc.toUpperCase()=="ACTIVATED"){
+                return cb(null, true)
+            }
+        }
+        return cb(null, false);
+    })
+}
 
 /**
  * @param {Object} apiConfigs 

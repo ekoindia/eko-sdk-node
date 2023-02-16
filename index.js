@@ -17,7 +17,8 @@ let EKO_API_CONFIGS = {
 const Eko = {
     init: init,
     verifyPAN: verifyPAN,
-    verifyBankAccount: verifyBankAccount
+    verifyBankAccount: verifyBankAccount,
+    isPANServiceActive: isPANServiceActive
 }
 
 /**
@@ -37,12 +38,17 @@ function init(configs){
         }
     }
     console.debug("EKO API configs: ", JSON.stringify(EKO_API_CONFIGS, null, 4))
-    kyc.activatePANApi(EKO_API_CONFIGS, function(err, result){
-        if(err){
-            console.debug(err)
-            // throw new Error("Error in enabling PAN verification API"); 
+    isPANServiceActive(function(err, isActive){
+        if(isActive){
+            return;
         }
-    });
+        kyc.activatePANApi(EKO_API_CONFIGS, function(err, result){
+            if(err){
+                console.debug(err)
+                // throw new Error("Error in enabling PAN verification API"); 
+            }
+        });
+    })
     return Eko;
 }
 
@@ -67,6 +73,15 @@ function verifyPAN(options, cb){
  */
 function verifyBankAccount(options, cb){
     kyc.verifyBankAccount(EKO_API_CONFIGS, options, function(err, result){
+        return cb(err, result)
+    });
+}
+
+/**
+ * @param {*} cb fn(err, isActive)
+ */
+function isPANServiceActive(cb){
+    kyc.isPANServiceActive(EKO_API_CONFIGS, function(err, result){
         return cb(err, result)
     });
 }

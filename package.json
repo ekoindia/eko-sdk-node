@@ -1,6 +1,6 @@
 {
   "name": "@ekoindia/eko-sdk-node",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Access all financial services with simple to use APIs and SDK",
   "main": "index.js",
   "scripts": {

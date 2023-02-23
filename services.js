@@ -30,8 +30,9 @@ function getServiceStatus(apiConfigs, options, cb) {
     }, null, function(err, resultJson){
         /**
          * Sample response
-         * 
-            {
+          {
+            "response_status_id": 1,
+            "data": {
                 "user_code":"20110001",
                 "initiator_id":"9962981729",
                 "service_status_list":[{
@@ -47,6 +48,7 @@ function getServiceStatus(apiConfigs, options, cb) {
                     "state":null,
                 }]
             }
+          }
          */
         cb(err, resultJson ? resultJson.data : null);
     })

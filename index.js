@@ -81,8 +81,8 @@ function verifyBankAccount(options, cb){
  * @param {*} cb fn(err, isActive)
  */
 function isPANServiceActive(cb){
-    kyc.isPANServiceActive(EKO_API_CONFIGS, function(err, result){
-        return cb(err, result)
+    kyc.isPANServiceActive(EKO_API_CONFIGS, function(err, isActive){
+        return cb(err, isActive)
     });
 }
 

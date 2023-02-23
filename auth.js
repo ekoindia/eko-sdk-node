@@ -22,5 +22,6 @@ function getAuthKeys(staticAuthKey) {
 function getSecretKeyTimestamp() {
     // Get current timestamp in milliseconds since UNIX epoch as STRING
     // Check out https://currentmillis.com to understand the timestamp format
-    return Math.round(Date.now()).toString();
+    let timestamp = Math.round(Date.now()).toString();
+    return timestamp;
 }

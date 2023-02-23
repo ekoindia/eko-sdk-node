@@ -17,6 +17,19 @@ describe('index.js', function() {
         })
     })
 
+    describe('#isPANServiceActive(cb)', function() {
+        it('isPANServiceActive(cb) should return valid data to the callback', function(done) {
+          ekoApi.isPANServiceActive(function(err, isActive){ 
+              try{
+                  expect(isActive).to.be.an('boolean', 'Returned data is not a boolean')
+                  done()
+              } catch(error){
+                  done(error)
+              }
+          })
+        });
+      })
+
     describe('#verifyPAN(options, cb)', function() {
       let validOptions = { 
                 panNumber: "VBLPZ6447L", 

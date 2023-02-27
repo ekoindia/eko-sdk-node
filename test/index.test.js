@@ -59,16 +59,35 @@ describe('index.js', function() {
                 initiatorId: "9910028267"
             }
         it('verifyBankAccount('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
-          ekoApi.verifyBankAccount(validOptions, function(err, data){ 
-              try{
-                  expect(data).to.be.an('Object', 'Returned data is not an object')
-                  assert.isNotNull(data)
-                  expect(data).to.include.all.keys("amount", "fee","verification_failure_refund", "is_Ifsc_required", "tid", "client_ref_id", "bank", "is_name_editable", "user_code", "aadhar", "recipient_name", "account");
-                  done()
-              } catch(error){
-                  done(error)
-              }
-          })
+            ekoApi.verifyBankAccount(validOptions, function(err, data){ 
+                try{
+                    expect(data).to.be.an('Object', 'Returned data is not an object')
+                    assert.isNotNull(data)
+                    expect(data).to.include.all.keys("amount", "fee","verification_failure_refund", "is_Ifsc_required", "tid", "client_ref_id", "bank", "is_name_editable", "user_code", "aadhar", "recipient_name", "account");
+                    done()
+                } catch(error){
+                    done(error)
+                }
+            })
         });
-      })
+    })
+
+
+    describe('#billPayments.getOperatorsList', function() {
+        let validOptions = { }
+        it('billPayments.getOperatorsList('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
+            ekoApi.billPayments.getOperatorsList(validOptions, function(err, data){ 
+                try{
+                    expect(data).to.be.an('Array', 'Returned data is not an array')
+                    assert.isNotNull(data)
+                    data.forEach(element => {
+                        expect(element).to.include.all.keys("operator_id", "name", "billFetchResponse", "high_commission_channel", "kyc_required", "operator_category", "location_id"); 
+                    });
+                    done()
+                } catch(error){
+                    done(error)
+                }
+            })
+        });
+    })
 })

@@ -1,4 +1,5 @@
 const kyc = require('./kyc');
+const billPayments = require('./billPayments');
 
 // Make sure to set these values via Eko.init(ekoApiConfigOptions) else default values will be used
 let EKO_API_CONFIGS = {
@@ -18,7 +19,14 @@ const Eko = {
     init: init,
     verifyPAN: verifyPAN,
     verifyBankAccount: verifyBankAccount,
-    isPANServiceActive: isPANServiceActive
+    isPANServiceActive: isPANServiceActive,
+    billPayments: {
+        getOperatorsList: function(options, cb){
+            billPayments.getOperatorsList(EKO_API_CONFIGS, options, function(err, operatorsList){
+                return cb(err, operatorsList);
+            })
+        }
+    }
 }
 
 /**

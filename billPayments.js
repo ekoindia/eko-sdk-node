@@ -147,7 +147,7 @@ function getOperatorLocations(apiConfigs, options, cb) {
 
 
 /**
- * Get the list of the parameters to be passed and other info while doing bill fetch or bill pay transactions for that operator
+ * Get list of parameter info that has to be passed while doing bill payments transaction
  * @param {Object} apiConfigs An object containing the API configuration details.
  * @param {Object} options { operator: operatorId }
  * @param {function} cb A callback function to handle the response from the server

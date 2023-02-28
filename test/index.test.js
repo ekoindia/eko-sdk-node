@@ -132,6 +132,24 @@ describe('index.js', function() {
         });
     })
 
+    describe('#billPayments.getOperatorParameters', function() {
+        let validOptions = { operator: 1 }
+        it('billPayments.getOperatorParameters('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
+            ekoApi.billPayments.getOperatorParameters(validOptions, function(err, data){ 
+                try{
+                    expect(data).to.be.an('Array', 'Returned data is not an array')
+                    assert.isNotNull(data)
+                    data.forEach(element => {
+                        expect(element).to.include.all.keys("error_message", "param_label","regex", "param_name", "param_id", "param_type");
+                    })
+                    done()
+                } catch(error){
+                    done(error)
+                }
+            })
+        });
+    })
+
     /** Bill Payments APIs --END-- */
 
 }) 

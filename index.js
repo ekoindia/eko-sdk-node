@@ -35,6 +35,11 @@ const Eko = {
             billPayments.getOperatorLocations(EKO_API_CONFIGS, options, function(err, operatorsList){
                 return cb(err, operatorsList);
             })
+        },
+        getOperatorParameters: function(options, cb){
+            billPayments.getOperatorParameters(EKO_API_CONFIGS, options, function(err, operatorsList){
+                return cb(err, operatorsList);
+            })
         }
     }
 }

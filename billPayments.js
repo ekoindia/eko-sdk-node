@@ -4,6 +4,7 @@
 exports.getOperators = getOperators;
 exports.getOperatorCategories = getOperatorCategories;
 exports.getOperatorLocations = getOperatorLocations;
+exports.getOperatorParameters = getOperatorParameters;
 
 const network = require('./network');
 
@@ -14,7 +15,7 @@ const network = require('./network');
  * @param {Object} options { category: categoryId, location:locationId  }
  * @param {function} cb A callback function to handle the response from the server
  * @param {Error} cb.err - An error object, if an error occurred.
- * @param {Object} cb.operatorsList - The JSON response from the server
+ * @param {Array<Object>} cb.operatorsList - The data from JSON response from the server
  *  [
         {
             "operator_id": 28,
@@ -76,7 +77,7 @@ function getOperators(apiConfigs, options, cb) {
  * @param {Object} options { status: 'active', operator: operatorId } //Not yet supported
  * @param {function} cb A callback function to handle the response from the server
  * @param {Error} cb.err - An error object, if an error occurred.
- * @param {Object} cb.operatorCategoryList - The JSON response from the server
+ * @param {Array<Object>} cb.operatorCategoryList - The data from JSON response from the server
  *  [
         {
             "operator_category_name": "Broadband Postpaid",
@@ -108,13 +109,13 @@ function getOperatorCategories(apiConfigs, options, cb) {
     })
 }
 
- /**
+/**
  * Get the list of operators' location id and their location (geographic state) name
  * @param {Object} apiConfigs An object containing the API configuration details.
  * @param {Object} options { status: 'active', operator: operatorId } //Not yet supported
  * @param {function} cb A callback function to handle the response from the server
  * @param {Error} cb.err - An error object, if an error occurred.
- * @param {Object} cb.operatorLocationList - The JSON response from the server
+ * @param {Array<Object>} cb.operatorLocationList - The data from JSON response from the server
  *  [
         {
             "operator_location_name": "Andaman & Nicobar Islands",
@@ -138,6 +139,57 @@ function getOperatorLocations(apiConfigs, options, cb) {
                     "abbreviation": "AN"
                 },
             ]
+            }
+         */
+        cb(err, resultJson ? resultJson.data : null);
+    })
+}
+
+
+/**
+ * Get the list of the parameters to be passed and other info while doing bill fetch or bill pay transactions for that operator
+ * @param {Object} apiConfigs An object containing the API configuration details.
+ * @param {Object} options { operator: operatorId }
+ * @param {function} cb A callback function to handle the response from the server
+ * @param {Error} cb.err - An error object, if an error occurred.
+ * @param {Array<Object>} cb.operatorParameterList - The data from JSON response from the server
+ * [ 
+    {
+        "error_message": "Please enter a valid 10 digit Customer ID (eg. 1000111336)",
+        "param_label": "Customer ID",
+        "regex": "^[0-9]{10}$",
+        "param_name": "utility_acc_no",
+        "param_id": "1",
+        "param_type": "Numeric"
+    }
+   ]
+ */
+function getOperatorParameters(apiConfigs, options, cb) {
+    if(!options || !options.operator){
+        return cb({ errorMessage: 'Must provide operatorId', errorCode: 'VALIDATION_ERROR' }, null)
+    }
+    let operatorId = options.operator;
+    network.send(Object.assign(apiConfigs, { contentType: 'application/json' }), {
+        path: '/ekoapi/v2/billpayments/operators/'+operatorId,
+        method: 'GET'
+    }, null, function(err, resultJson){
+        /**
+         * On success i.e. 200 status
+         * {
+                "operator_name": "Adani Gas",
+                "data": [
+                    {
+                    "error_message": "Please enter a valid 10 digit Customer ID (eg. 1000111336)",
+                    "param_label": "Customer ID",
+                    "regex": "^[0-9]{10}$",
+                    "param_name": "utility_acc_no",
+                    "param_id": "1",
+                    "param_type": "Numeric"
+                    }
+                ],
+                "operator_id": 51,
+                "fetchBill": 1,
+                "BBPS": 1
             }
          */
         cb(err, resultJson ? resultJson.data : null);

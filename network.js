@@ -40,10 +40,14 @@ function send(apiConfigs, reqOptions, data, cb){
     if(data){
         console.debug("Posting data: ");
         console.debug(JSON.stringify(data, null, 4));
-        let encodedData = transformObjectToQueryParams(data);
-        console.debug("Encoded data for : ");
-        console.debug(encodedData);
-        req.write(encodedData);
+        if(finalRequestOptions.headers['Content-Type'] && finalRequestOptions.headers['Content-Type']=="application/x-www-form-urlencoded"){
+            let encodedData = transformObjectToQueryParams(data);
+            console.debug("Encoded data for : ");
+            console.debug(encodedData);
+            req.write(encodedData);
+        } else {
+            req.write(JSON.stringify(data));
+        }
     }
     req.end();
     req.on('error', (error) => {

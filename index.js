@@ -22,25 +22,30 @@ const Eko = {
     isPANServiceActive: isPANServiceActive,
     billPayments: {
         getOperators: function(options, cb){
-            billPayments.getOperators(EKO_API_CONFIGS, options, function(err, operatorsList){
-                return cb(err, operatorsList);
+            billPayments.getOperators(EKO_API_CONFIGS, options, function(err, operatorList){
+                return cb(err, operatorList);
             })
         },
         getOperatorCategories: function(options, cb){
-            billPayments.getOperatorCategories(EKO_API_CONFIGS, options, function(err, operatorsList){
-                return cb(err, operatorsList);
+            billPayments.getOperatorCategories(EKO_API_CONFIGS, options, function(err, operatorCategoryList){
+                return cb(err, operatorCategoryList);
             })
         },
         getOperatorLocations: function(options, cb){
-            billPayments.getOperatorLocations(EKO_API_CONFIGS, options, function(err, operatorsList){
-                return cb(err, operatorsList);
+            billPayments.getOperatorLocations(EKO_API_CONFIGS, options, function(err, operatorLocationList){
+                return cb(err, operatorLocationList);
             })
         },
         getOperatorParameters: function(options, cb){
-            billPayments.getOperatorParameters(EKO_API_CONFIGS, options, function(err, operatorsList){
-                return cb(err, operatorsList);
+            billPayments.getOperatorParameters(EKO_API_CONFIGS, options, function(err, operatorParametersList){
+                return cb(err, operatorParametersList);
             })
-        }
+        },
+        getBill: function(options, cb){
+            billPayments.getBill(EKO_API_CONFIGS, options, function(err, billInfo){
+                return cb(err, billInfo);
+            })
+        },
     }
 }
 

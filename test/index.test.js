@@ -150,6 +150,35 @@ describe('index.js', function() {
         });
     })
 
+    describe('#billPayments.getBill', function() {
+        let validOptions = { 
+            initatorId: 9962981729,
+            "operator_id":"1",
+            "user_code":"20810200",
+            "client_ref_id":"202105311125123456",
+            "utility_acc_no":"151627591",
+            "confirmation_mobile_no":"9999999999",
+            "sender_name":"Kaushik",
+            "source_ip":"121.121.1.1",
+            "latlong":"77.06794760,77.06794760",
+            "hc_channel" : 1 
+         }
+        it('billPayments.getBill('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
+            ekoApi.billPayments.getBill(validOptions, function(err, data){ 
+                try{
+                    expect(data).to.be.an('Object', 'Returned data is not an object')
+                    assert.isNotNull(data)
+                    data.forEach(element => {
+                        expect(element).to.include.all.keys("operator_id", "name", "billFetchResponse", "high_commission_channel", "kyc_required", "operator_category", "location_id");
+                    })
+                    done()
+                } catch(error){
+                    done(error)
+                }
+            })
+        });
+    })
+
     /** Bill Payments APIs --END-- */
 
 }) 

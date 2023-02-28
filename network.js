@@ -12,11 +12,11 @@ function send(apiConfigs, reqOptions, data, cb){
     //Override default request options if needed
     let finalRequestOptions = Object.assign(defaultRequestOptions, reqOptions);
     console.debug("Request OPTIONS: ");
-    console.debug(JSON.stringify(finalRequestOptions));
+    console.debug(JSON.stringify(finalRequestOptions, null, 4));
     const req = https.request(finalRequestOptions, (res) => {
         res.setEncoding('utf8');
         console.debug('Response STATUS: ' + res.statusCode);
-        console.debug('Response HEADERS: ' + JSON.stringify(res.headers));
+        console.debug('Response HEADERS: ' + JSON.stringify(res.headers, null, 4));
         let result = '';
         res.on('data', chunk => {
             result = result + chunk;
@@ -39,7 +39,7 @@ function send(apiConfigs, reqOptions, data, cb){
     });
     if(data){
         console.debug("Posting data: ");
-        console.debug(JSON.stringify(data));
+        console.debug(JSON.stringify(data, null, 4));
         let encodedData = transformObjectToQueryParams(data);
         console.debug("Encoded data for : ");
         console.debug(encodedData);

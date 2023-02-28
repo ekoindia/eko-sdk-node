@@ -11,9 +11,9 @@ const network = require('./network');
 
 /**
  * Get list of utility bill operators
- * @param {Object} apiConfigs An object containing the API configuration details.
- * @param {Object} options { category: categoryId, location:locationId  }
- * @param {function} cb A callback function to handle the response from the server
+ * @param {Object} apiConfigs - An object containing the API configuration details.
+ * @param {Object} options - { category: categoryId, location:locationId  }
+ * @param {function} cb - A callback function to handle the response from the server
  * @param {Error} cb.err - An error object, if an error occurred.
  * @param {Array<Object>} cb.operatorsList - The data from JSON response from the server
  *  [
@@ -73,9 +73,9 @@ function getOperators(apiConfigs, options, cb) {
 
 /**
  * Get the list of operators' category id and their category names
- * @param {Object} apiConfigs An object containing the API configuration details.
- * @param {Object} options { status: 'active', operator: operatorId } //Not yet supported
- * @param {function} cb A callback function to handle the response from the server
+ * @param {Object} apiConfigs - An object containing the API configuration details.
+ * @param {Object} options - { status: 'active', operator: operatorId } //Not yet supported
+ * @param {function} cb - A callback function to handle the response from the server
  * @param {Error} cb.err - An error object, if an error occurred.
  * @param {Array<Object>} cb.operatorCategoryList - The data from JSON response from the server
  *  [
@@ -111,9 +111,9 @@ function getOperatorCategories(apiConfigs, options, cb) {
 
 /**
  * Get the list of operators' location id and their location (geographic state) name
- * @param {Object} apiConfigs An object containing the API configuration details.
- * @param {Object} options { status: 'active', operator: operatorId } //Not yet supported
- * @param {function} cb A callback function to handle the response from the server
+ * @param {Object} apiConfigs - An object containing the API configuration details.
+ * @param {Object} options - { status: 'active', operator: operatorId } //Not yet supported
+ * @param {function} cb - A callback function to handle the response from the server
  * @param {Error} cb.err - An error object, if an error occurred.
  * @param {Array<Object>} cb.operatorLocationList - The data from JSON response from the server
  *  [
@@ -148,9 +148,10 @@ function getOperatorLocations(apiConfigs, options, cb) {
 
 /**
  * Get list of parameter info that has to be passed while doing bill payments transaction
- * @param {Object} apiConfigs An object containing the API configuration details.
- * @param {Object} options { operator: operatorId }
- * @param {function} cb A callback function to handle the response from the server
+ * @param {Object} apiConfigs - An object containing the API configuration details.
+ * @param {Object} options - { operator: operatorId }
+ * @param {string} options.operator - Operator id
+ * @param {function} cb - A callback function to handle the response from the server
  * @param {Error} cb.err - An error object, if an error occurred.
  * @param {Array<Object>} cb.operatorParameterList - The data from JSON response from the server
  * [ 

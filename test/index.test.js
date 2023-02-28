@@ -17,6 +17,8 @@ describe('index.js', function() {
         })
     })
 
+    /** KYC APIs --START-- */
+
     describe('#isPANServiceActive(cb)', function() {
         it('isPANServiceActive(cb) should return valid data to the callback', function(done) {
           ekoApi.isPANServiceActive(function(err, isActive){ 
@@ -72,11 +74,14 @@ describe('index.js', function() {
         });
     })
 
+    /** KYC APIs --END-- */
 
-    describe('#billPayments.getOperatorsList', function() {
+    /** Bill Payments APIs --START-- */
+
+    describe('#billPayments.getOperators', function() {
         let validOptions = { }
-        it('billPayments.getOperatorsList('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
-            ekoApi.billPayments.getOperatorsList(validOptions, function(err, data){ 
+        it('billPayments.getOperators('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
+            ekoApi.billPayments.getOperators(validOptions, function(err, data){ 
                 try{
                     expect(data).to.be.an('Array', 'Returned data is not an array')
                     assert.isNotNull(data)
@@ -90,4 +95,43 @@ describe('index.js', function() {
             })
         });
     })
-})
+
+    describe('#billPayments.getOperatorCategories', function() {
+        let validOptions = { }
+        it('billPayments.getOperatorCategories('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
+            ekoApi.billPayments.getOperatorCategories(validOptions, function(err, data){ 
+                try{
+                    expect(data).to.be.an('Array', 'Returned data is not an array')
+                    assert.isNotNull(data)
+                    data.forEach(element => {
+                        expect(element).to.include.all.keys("operator_category_name", "operator_category_id", "operator_category_group", "status"); 
+                    });
+                    done()
+                } catch(error){
+                    done(error)
+                }
+            })
+        });
+    })
+
+    describe('#billPayments.getOperatorLocations', function() {
+        let validOptions = { }
+        it('billPayments.getOperatorLocations('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
+            ekoApi.billPayments.getOperatorLocations(validOptions, function(err, data){ 
+                try{
+                    expect(data).to.be.an('Array', 'Returned data is not an array')
+                    assert.isNotNull(data)
+                    data.forEach(element => {
+                        expect(element).to.include.all.keys("operator_location_name", "operator_location_id", "abbreviation");
+                    });
+                    done()
+                } catch(error){
+                    done(error)
+                }
+            })
+        });
+    })
+
+    /** Bill Payments APIs --END-- */
+
+}) 

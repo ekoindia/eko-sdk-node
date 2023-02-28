@@ -1,9 +1,9 @@
 /**
  * Bill payments related APIs
  */
-exports.getOperatorsList = getOperatorsList;
-// exports.getOperatorsCategoryList = getOperatorsCategoryList;
-// exports.getOperatorsLocationList = getOperatorsLocationList;
+exports.getOperators = getOperators;
+exports.getOperatorCategories = getOperatorCategories;
+exports.getOperatorLocations = getOperatorLocations;
 
 const network = require('./network');
 
@@ -27,7 +27,7 @@ const network = require('./network');
         },
     ]
  */
-function getOperatorsList(apiConfigs, options, cb) {
+function getOperators(apiConfigs, options, cb) {
     const data = {}
     if(options.location){
         data['location'] = options.location;
@@ -63,6 +63,81 @@ function getOperatorsList(apiConfigs, options, cb) {
                     "location_id": 24
                 }
               ]
+            }
+         */
+        cb(err, resultJson ? resultJson.data : null);
+    })
+}
+
+
+/**
+ * Get the list of operators' category id and their category names
+ * @param {Object} apiConfigs An object containing the API configuration details.
+ * @param {Object} options { status: 'active', operator: operatorId } //Not yet supported
+ * @param {function} cb A callback function to handle the response from the server
+ * @param {Error} cb.err - An error object, if an error occurred.
+ * @param {Object} cb.operatorCategoryList - The JSON response from the server
+ *  [
+        {
+            "operator_category_name": "Broadband Postpaid",
+            "operator_category_id": 1,
+            "operator_category_group": "0",
+            "status": "1"
+        },
+    ]
+ */
+function getOperatorCategories(apiConfigs, options, cb) {
+    network.send(Object.assign(apiConfigs, { contentType: 'application/json' }), {
+        path: '/ekoapi/v2/billpayments/operators_category',
+        method: 'GET'
+    }, null, function(err, resultJson){
+        /**
+         * On success i.e. 200 status
+         * {
+            "data": [
+                {
+                    "operator_category_name": "Broadband Postpaid",
+                    "operator_category_id": 1,
+                    "operator_category_group": "0",
+                    "status": "1"
+                },
+            ]
+            }
+         */
+        cb(err, resultJson ? resultJson.data : null);
+    })
+}
+
+ /**
+ * Get the list of operators' location id and their location (geographic state) name
+ * @param {Object} apiConfigs An object containing the API configuration details.
+ * @param {Object} options { status: 'active', operator: operatorId } //Not yet supported
+ * @param {function} cb A callback function to handle the response from the server
+ * @param {Error} cb.err - An error object, if an error occurred.
+ * @param {Object} cb.operatorLocationList - The JSON response from the server
+ *  [
+        {
+            "operator_location_name": "Andaman & Nicobar Islands",
+            "operator_location_id": "35",
+            "abbreviation": "AN"
+        },
+    ]
+ */
+function getOperatorLocations(apiConfigs, options, cb) {
+    network.send(Object.assign(apiConfigs, { contentType: 'application/json' }), {
+        path: '/ekoapi/v2/billpayments/operators_location',
+        method: 'GET'
+    }, null, function(err, resultJson){
+        /**
+         * On success i.e. 200 status
+         * {
+            "data": [
+                {
+                    "operator_location_name": "Andaman & Nicobar Islands",
+                    "operator_location_id": "35",
+                    "abbreviation": "AN"
+                },
+            ]
             }
          */
         cb(err, resultJson ? resultJson.data : null);

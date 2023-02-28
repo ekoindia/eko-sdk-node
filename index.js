@@ -21,8 +21,18 @@ const Eko = {
     verifyBankAccount: verifyBankAccount,
     isPANServiceActive: isPANServiceActive,
     billPayments: {
-        getOperatorsList: function(options, cb){
-            billPayments.getOperatorsList(EKO_API_CONFIGS, options, function(err, operatorsList){
+        getOperators: function(options, cb){
+            billPayments.getOperators(EKO_API_CONFIGS, options, function(err, operatorsList){
+                return cb(err, operatorsList);
+            })
+        },
+        getOperatorCategories: function(options, cb){
+            billPayments.getOperatorCategories(EKO_API_CONFIGS, options, function(err, operatorsList){
+                return cb(err, operatorsList);
+            })
+        },
+        getOperatorLocations: function(options, cb){
+            billPayments.getOperatorLocations(EKO_API_CONFIGS, options, function(err, operatorsList){
                 return cb(err, operatorsList);
             })
         }

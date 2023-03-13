@@ -152,7 +152,7 @@ describe('index.js', function() {
 
     describe('#billPayments.getBill', function() {
         let validOptions = { 
-            initatorId: 9962981729,
+            initiatorId: 9962981729,
             "operator_id":"1",
             "user_code":"20810200",
             "client_ref_id":"202105311125123456",

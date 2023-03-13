@@ -27,13 +27,19 @@ function send(apiConfigs, reqOptions, data, cb){
             console.debug(result);
             try {
                 if(res.statusCode === 200){
-                    const finalResult = JSON.parse(result);
-                    cb(null, finalResult);
+                    try{
+                        const finalResult = JSON.parse(result);
+                        cb(null, finalResult);
+                    } catch(err){
+                        cb({ statusCode: 200, statusMessage: "Unexpected data format in response" }, null);
+                    }
                 } else {
-                    cb({ statusCode: res.statusCode, statusMessage: result }, null)
+                    let errResponse = { statusCode: res.statusCode, statusMessage: result };
+                    cb(errResponse, null);
                 }
             } catch(err){
-                cb(err, null);
+                console.log(err)
+                cb({ statusMessage: "Unexpected error" }, null);
             }
         });
     });

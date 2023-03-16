@@ -7,9 +7,9 @@ let EKO_API_CONFIGS = {
     port: 25004,
     developerKey: "becbbce45f79c6f5109f848acd540567",
     authKey: "f74c50a1-f705-4634-9cda-30a477df91b7",
-    initiatorId: "9971771929",
-    partnerUserCode: "20110001" //unique Eko code provided for your org
-    // initiatorId: "9962981729"
+    // initiatorId: "9971771929",
+    partnerUserCode: "20110001", //unique Eko code provided for your org
+    initiatorId: "9962981729"
 }
 
 /**

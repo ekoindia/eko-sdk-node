@@ -234,10 +234,9 @@ function getBill(apiConfigs, options, cb) {
     const data = Object.assign({}, options);
     const initiatorId = data.initiatorId || apiConfigs.initiatorId;
     if(data.hasOwnProperty('initiatorId')) delete data['initiatorId'];
-    network.send(apiConfigs, {
+    network.send(Object.assign({}, apiConfigs, { contentType: 'application/json' }), {
         path: '/ekoapi/v2/billpayments/fetchbill?initiator_id='+initiatorId,
         method: 'POST',
-        'Content-Type': 'application/json'
     }, data, function(err, resultJson){
         /**
          * On success i.e. 200 status

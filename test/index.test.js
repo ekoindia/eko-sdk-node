@@ -53,12 +53,12 @@ describe('index.js', function() {
     })
 
     describe('#verifyBankAccount(options, cb)', function() {
-        let validOptions = { 
-                accountNo: '1711654121', 
-                ifsc: "KKBK0000261", 
+        let validOptions = {
+                accountNo: '1711654121',
+                ifsc: "KKBK0000261",
                 userCode:"20810200",
-                customerId: "9999912348",
-                initiatorId: "9910028267"
+                customerId: "6111111111",
+                initiatorId: "9962981729"
             }
         it('verifyBankAccount('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
             ekoApi.verifyBankAccount(validOptions, function(err, data){ 
@@ -168,6 +168,7 @@ describe('index.js', function() {
                 try{
                     expect(data).to.be.an('Object', 'Returned data is not an object')
                     assert.isNotNull(data)
+                    assert.isArray(data)
                     data.forEach(element => {
                         expect(element).to.include.all.keys("operator_id", "name", "billFetchResponse", "high_commission_channel", "kyc_required", "operator_category", "location_id");
                     })

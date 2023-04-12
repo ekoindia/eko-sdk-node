@@ -6,6 +6,7 @@ exports.getOperatorCategories = getOperatorCategories;
 exports.getOperatorLocations = getOperatorLocations;
 exports.getOperatorParameters = getOperatorParameters;
 exports.getBill = getBill;
+exports.payBill = payBill;
 
 const network = require('./network');
 
@@ -214,7 +215,7 @@ function getOperatorParameters(apiConfigs, options, cb) {
  * @param {number} [options.hc_channel=0] - High commission channel flag. 0 for instant, 1 for offline. Default 0.
  * @param {function} cb - A callback function to handle the response from the server
  * @param {Error} cb.err - An error object, if an error occurred.
- * @param {Array<Object>} cb.operatorParameterList - The data from JSON response from the server
+ * @param {Object} cb.billInfo - The data from JSON response from the server
  * {
         "amount": "673.00",
         "bbpstrxnrefid": "",
@@ -256,6 +257,109 @@ function getBill(apiConfigs, options, cb) {
                 "response_type_id": 1052,
                 "message": "Due Bill Amount For utility",
                 "status": 0
+            }
+         */
+        cb(err, resultJson ? resultJson.data : null);
+    })
+}
+
+/**
+ * Pay the bill
+ * @param {Object} apiConfigs - An object containing the API configuration details.
+ * @param {Object} options - { amount, user_code, client_ref_id, utility_acc_no, confirmation_mobile_no, sender_name, operator_id, source_ip, latlong, hc_channel  }
+ * @param {string} options.amount - Amount to pay
+ * @param {string} options.operator_id - Operator id
+ * @param {string} options.user_code - User code value of the retailer from whom the request is coming
+ * @param {string} options.client_ref_id - Unique transaction ID which you will generate from your end for every transaction
+ * @param {string} options.utility_acc_no - Account number provided by operator against which bill needs to be fetched / paid
+ * @param {string} options.confirmation_mobile_no - Value of customer's mobile number
+ * @param {string} options.sender_name - Valid Name of Customer
+ * @param {string} options.source_ip  - IP of the merchant from whom the request is coming
+ * @param {string} options.latlong - latlong of the merchant from whom the request is coming
+ * @param {number} [options.hc_channel=0] - High commission channel flag. 0 for instant, 1 for offline. Default 0.
+ * @param {string} [billfetchresponse] - Needs to be passed only when value of this parameter is 1 in Get operator list API. You will get the value of this parameter in fetchBill API response
+ * @param {function} cb - A callback function to handle the response from the server
+ * @param {Error} cb.err - An error object, if an error occurred.
+ * @param {Object} cb.paymentReceipt - The data from JSON response from the server
+ * {
+        "tx_status": "0",
+        "tds": "0.0",
+        "bbpstrxnrefid": "",
+        "txstatus_desc": "Success",
+        "utilitycustomername": "",
+        "fee": "0.0",
+        "discount": "",
+        "tid": "2157075250",
+        "sender_id": "9962981729",
+        "balance": "5.9643760139E8",
+        "customerconveniencefee": "",
+        "commission": "0.0",
+        "state": "1",
+        "recipient_id": "",
+        "timestamp": "2021-07-19T12:07:04.944Z",
+        "amount": "50.0",
+        "mobile": "9962981729",
+        "reference_tid": "null",
+        "serial_number": "",
+        "customermobilenumber": "",
+        "payment_mode_desc": "",
+        "last_used_okekey": "22",
+        "operator_name": "BSES Rajdhani(BillDesk)",
+        "totalamount": "50.0",
+        "billnumber": "",
+        "billdate": "",
+        "status_text": "",
+        "account": "151627591" 
+    }
+ */
+function payBill(apiConfigs, options, cb) {
+    if(!options || !options.amount || !options.operator_id || !options.user_code || !options.client_ref_id || !options.utility_acc_no || !options.confirmation_mobile_no || !options.sender_name || !options.source_ip || !options.latlong){
+        return cb({ errorMessage: 'Missing some of the mandatory parameters among {amount, operator_id, user_code, client_ref_id, utility_acc_no, confirmation_mobile_no, sender_name, source_ip, latlong }', errorCode: 'VALIDATION_ERROR' }, null)
+    }
+    const data = Object.assign({}, options);
+    const initiatorId = data.initiatorId || apiConfigs.initiatorId;
+    if(data.hasOwnProperty('initiatorId')) delete data['initiatorId'];
+    network.send(Object.assign({}, apiConfigs, { contentType: 'application/json' }), {
+        path: '/ekoapi/v2/billpayments/paybill?initiator_id='+initiatorId,
+        method: 'POST',
+    }, data, function(err, resultJson){
+        /**
+         * On success i.e. 200 status
+         * {
+                "response_status_id": 0,
+                "response_type_id": 333,
+                "message": "Success Last_used_OkeyKey: 22",
+                "status": 0
+                "data": {
+                    "tx_status": "0",
+                    "tds": "0.0",
+                    "bbpstrxnrefid": "",
+                    "txstatus_desc": "Success",
+                    "utilitycustomername": "",
+                    "fee": "0.0",
+                    "discount": "",
+                    "tid": "2157075250",
+                    "sender_id": "9962981729",
+                    "balance": "5.9643760139E8",
+                    "customerconveniencefee": "",
+                    "commission": "0.0",
+                    "state": "1",
+                    "recipient_id": "",
+                    "timestamp": "2021-07-19T12:07:04.944Z",
+                    "amount": "50.0",
+                    "mobile": "9962981729",
+                    "reference_tid": "null",
+                    "serial_number": "",
+                    "customermobilenumber": "",
+                    "payment_mode_desc": "",
+                    "last_used_okekey": "22",
+                    "operator_name": "BSES Rajdhani(BillDesk)",
+                    "totalamount": "50.0",
+                    "billnumber": "",
+                    "billdate": "",
+                    "status_text": "",
+                    "account": "151627591"
+                },
             }
          */
         cb(err, resultJson ? resultJson.data : null);

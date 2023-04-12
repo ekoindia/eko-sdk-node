@@ -6,7 +6,7 @@ let EKO_API_CONFIGS = {
     hostname: "staging.eko.in",
     port: 25004,
     developerKey: "becbbce45f79c6f5109f848acd540567",
-    authKey: "f74c50a1-f705-4634-9cda-30a477df91b7",
+    authKey: "d2fe1d99-6298-4af2-8cc5-d97dcf46df30",
     // initiatorId: "9971771929",
     partnerUserCode: "20110001", //unique Eko code provided for your org
     initiatorId: "9962981729"
@@ -46,6 +46,11 @@ const Eko = {
                 return cb(err, billInfo);
             })
         },
+        payBill: function(options, cb){
+            billPayments.payBill(EKO_API_CONFIGS, options, function(err, paymentReceipt){
+                return cb(err, paymentReceipt);
+            })
+        }
     }
 }
 

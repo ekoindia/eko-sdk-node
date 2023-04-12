@@ -2,6 +2,7 @@
  * Authenticating APIs
  */
 exports.getAuthKeys = getAuthKeys;
+exports.getRequestHash = getRequestHash;
 
 const crypto = require('crypto');
 
@@ -24,4 +25,13 @@ function getSecretKeyTimestamp() {
     // Check out https://currentmillis.com to understand the timestamp format
     let timestamp = Math.round(Date.now()).toString();
     return timestamp;
+}
+
+function getRequestHash(staticAuthKey, secret_key_timestamp, utility_acc_no, amount, user_code){
+    const encodedKey = Buffer.from(staticAuthKey).toString('base64');
+    const data = secret_key_timestamp + utility_acc_no + amount + user_code;
+    const signatureReqHash = crypto.createHmac('SHA256', encodedKey).update(data).digest();
+    // Again encode the result using the base64.
+    const requestHash = Buffer.from(signatureReqHash).toString('base64');
+    return requestHash;
 }

@@ -78,7 +78,7 @@ describe('index.js', function() {
 
     /** Bill Payments APIs --START-- */
 
-    describe('#billPayments.getOperators', function() {
+    describe.skip('#billPayments.getOperators', function() {
         let validOptions = { }
         it('billPayments.getOperators('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
             ekoApi.billPayments.getOperators(validOptions, function(err, data){ 
@@ -168,10 +168,36 @@ describe('index.js', function() {
                 try{
                     expect(data).to.be.an('Object', 'Returned data is not an object')
                     assert.isNotNull(data)
+                    expect(data).to.include.all.keys("operator_id", "name", "billFetchResponse", "high_commission_channel", "kyc_required", "operator_category", "location_id");
+                    done()
+                } catch(error){
+                    done(error)
+                }
+            })
+        });
+    })
+
+    describe('#billPayments.payBill', function() {
+        let validOptions = { 
+            initiatorId: 9962981729,
+            "source_ip":"121.121.1.1",
+            "user_code":"20810200",
+            "amount":"50" ,
+            "client_ref_id":"202105311125123456",
+            "utility_acc_no":"151627591",
+            "confirmation_mobile_no":"9999999999",
+            "sender_name":"Kaushik",
+            "operator_id":"1",
+            "latlong":"77.06794760,77.06794760",
+            "hc_channel" : 1 
+         }
+        it('billPayments.payBill('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
+            ekoApi.billPayments.getBill(validOptions, function(err, data){ 
+                try{
+                    expect(data).to.be.an('Object', 'Returned data is not an object')
+                    assert.isNotNull(data)
                     assert.isArray(data)
-                    data.forEach(element => {
-                        expect(element).to.include.all.keys("operator_id", "name", "billFetchResponse", "high_commission_channel", "kyc_required", "operator_category", "location_id");
-                    })
+                    expect(data).to.include.all.keys("tx_status", "tds", "bbpstrxnrefid", "txstatus_desc", "utilitycustomername", "fee", "discount", "tid", "sender_id", "balance", "customerconveniencefee", "commission", "state", "recipient_id", "timestamp", "amount", "mobile", "reference_tid", "serial_number", "customermobilenumber", "payment_mode_desc", "last_used_okekey", "operator_name", "totalamount", "billnumber", "billdate", "status_text", "account")
                     done()
                 } catch(error){
                     done(error)

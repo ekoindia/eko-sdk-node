@@ -8,7 +8,7 @@ let EKO_API_CONFIGS = {
     developerKey: "becbbce45f79c6f5109f848acd540567",
     authKey: "d2fe1d99-6298-4af2-8cc5-d97dcf46df30",
     // initiatorId: "9971771929",
-    partnerUserCode: "20110001", //unique Eko code provided for your org
+    partnerUserCode: "20810200", //unique Eko code provided for your org
     initiatorId: "9962981729"
 }
 

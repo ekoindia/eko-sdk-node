@@ -4,7 +4,7 @@ const billPayments = require('./billPayments');
 // Make sure to set these values via Eko.init(ekoApiConfigOptions) else default values will be used
 let EKO_API_CONFIGS = {
     hostname: "staging.eko.in",
-    port: 25004,
+    port: 8080,
     developerKey: "becbbce45f79c6f5109f848acd540567",
     authKey: "d2fe1d99-6298-4af2-8cc5-d97dcf46df30",
     // initiatorId: "9971771929",
@@ -73,10 +73,25 @@ function init(configs){
     console.debug("EKO API configs: ", JSON.stringify(EKO_API_CONFIGS, null, 4))
     isPANServiceActive(function(err, isActive){
         if(isActive){
+            console.log("✔ PAN API service is activated already for user_code:"+ EKO_API_CONFIGS.partnerUserCode)
             return;
         }
         kyc.activatePANApi(EKO_API_CONFIGS, function(err, result){
             if(err){
+                console.log("Failed to activate PAN API service for user_code:"+ EKO_API_CONFIGS.partnerUserCode)
+                console.debug(err)
+                // throw new Error("Error in enabling PAN verification API"); 
+            }
+        });
+    })
+    billPayments.isBBPSServiceActive(EKO_API_CONFIGS, function(err, isActive){
+        if(isActive){
+            console.log("✔ BBPS API service is activated already for user_code:"+ EKO_API_CONFIGS.partnerUserCode)
+            return;
+        }
+        billPayments.activateBBPSApi(EKO_API_CONFIGS, function(err, result){
+            if(err){
+                console.log("Failed to activate BBPS API service for user_code:"+ EKO_API_CONFIGS.partnerUserCode)
                 console.debug(err)
                 // throw new Error("Error in enabling PAN verification API"); 
             }

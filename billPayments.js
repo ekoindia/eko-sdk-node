@@ -1,6 +1,8 @@
 /**
  * Bill payments related APIs
  */
+exports.isBBPSServiceActive = isBBPSServiceActive;
+exports.activateBBPSApi = activateBBPSApi;
 exports.getOperators = getOperators;
 exports.getOperatorCategories = getOperatorCategories;
 exports.getOperatorLocations = getOperatorLocations;
@@ -9,7 +11,33 @@ exports.getBill = getBill;
 exports.payBill = payBill;
 
 const network = require('./network');
+const services = require('./services')
 
+/**
+ * @param {Object} apiConfigs 
+ * @param {*} cb fn(err, isActive)
+ */
+function isBBPSServiceActive(apiConfigs, cb) {
+    services.getServiceStatus(apiConfigs, null, function(err, statusReponse){
+        if(statusReponse && statusReponse.service_status_list && statusReponse.length>0){
+            const statusObject = statusReponse.service_status_list.find((serviceStatusObject) => serviceStatusObject.service_code == services.SERVICE_CODES["BBPS"]);
+            if(statusObject && statusObject.status_desc && statusObject.status_desc.toUpperCase()=="ACTIVATED"){
+                return cb(null, true)
+            }
+        }
+        return cb(null, false);
+    })
+}
+
+/**
+ * @param {Object} apiConfigs 
+ * @param {*} cb 
+ */
+function activateBBPSApi(apiConfigs, cb) {
+    services.activateUserService(apiConfigs, { service: "BBPS" }, function(err, resultJson){
+        return cb(err, resultJson);
+    })
+}
 
 /**
  * Get list of utility bill operators

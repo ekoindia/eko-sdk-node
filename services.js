@@ -13,9 +13,13 @@ const network = require('./network');
 
 /**
  * Get a list of services alongwith their status for a user
- * @param {Object} apiConfigs 
- * @param {Object} options
- * @param {*} cb 
+ * @param {Object} apiConfigs - API configuration details
+ * @param {Object} options - { userCode, initiatorId }
+ * @param {string} [options.userCode] - The user/merchant for whom the enquiry needs to be done
+ * @param {string} [options.initiatorId] - The unique cell number with which you are onboarded on Eko's platform
+ * @param {function} cb - A callback function to handle the response from the server
+ * @param {Error} cb.err - An error object, if an error occurred
+ * @param {Object} cb.serviceStatusInfo - Object containing status info for various services
  */
 function getServiceStatus(apiConfigs, options, cb) {
     if(!apiConfigs && !options){
@@ -61,9 +65,15 @@ function getServiceStatus(apiConfigs, options, cb) {
 
 /**
  * Activate a particular service for a user e.g. pan, bbps, aeps, etc.
- * @param {Object} apiConfigs 
- * @param {Object} options { service: 'pan', latlong: '25.309580,83.005692', ...apiConfigs overrides }
- * @param {*} cb 
+ * @param {Object} apiConfigs - API configuration details
+ * @param {Object} options - { service: 'pan', latlong: '25.309580,83.005692', ...apiConfigs overrides }
+ * @param {string} options.service - The name of the service (e.g. pan, bbps) that you want to check status for
+ * @param {string} [options.latlong='77.06794760,77.06794760'] - "lattitude,longitude" of the user/merchant from whom the request is coming. To reduce the chances of fraud.
+ * @param {string} [options.userCode] - The user/merchant for whom the enquiry needs to be done
+ * @param {string} [options.initiatorId] - The unique cell number with which you are onboarded on Eko's platform
+ * @param {function} cb - A callback function to handle the response from the server
+ * @param {Error} cb.err - An error object, if an error occurred
+ * @param {Object} cb.serviceActivationInfo - Service activation response data
  */
 function activateUserService(apiConfigs, options, cb) {
     if(!apiConfigs && !options){
@@ -82,6 +92,16 @@ function activateUserService(apiConfigs, options, cb) {
         path: '/ekoapi/v1/user/service/activate',
         method: 'PUT'
     }, data, function(err, resultJson){
+        /**
+         * {
+            data: {
+            "service_code": 4,
+            "initiator_id": "9962981729",
+            "user_code": "20810200",
+            "latlong": "77.06794760,77.06794760"
+            }
+           }
+        */
         cb(err, resultJson ? resultJson.data : null);
     })
 }

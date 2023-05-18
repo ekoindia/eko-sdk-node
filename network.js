@@ -9,6 +9,8 @@ const https = require('https');
 
 function send(apiConfigs, reqOptions, data, cb){
     let defaultRequestOptions = createDefaultRequestOptions(apiConfigs);
+    // Add request_hash header if needed
+    addRequestHashHeaderIfRequired(defaultRequestOptions, reqOptions);
     //Override default request options if needed
     let finalRequestOptions = Object.assign(defaultRequestOptions, reqOptions);
     console.debug("Request OPTIONS: ");
@@ -60,6 +62,24 @@ function send(apiConfigs, reqOptions, data, cb){
         console.error(error);
         cb(error, null);
     });
+}
+
+/**
+ * Adds request_hash in the reqOptions headers if required
+ * @param {Object} defaultRequestOptions 
+ * @param {Object} reqOptions
+ */
+function addRequestHashHeaderIfRequired(defaultRequestOptions, reqOptions) {
+    if (reqOptions && reqOptions.requestHashSuffix) {
+        // Requires request_hash header
+        if (!reqOptions['headers']){
+            reqOptions.headers = {};
+        }
+        reqOptions.headers.request_hash = auth.getRequestHash(defaultRequestOptions.headers['developer_key'], defaultRequestOptions.headers['secret-key-timestamp'], reqOptions.requestHashSuffix);
+        delete reqOptions['requestHashSuffix'];
+        return true;
+    }
+    return false;
 }
 
 /**

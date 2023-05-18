@@ -141,7 +141,7 @@ function getOperatorCategories(apiConfigs, options, cb) {
 
 /**
  * Get the list of operators' location id and their location (geographic state) name
- * @param {Object} apiConfigs - An object containing the API configuration details.
+ * @param {Object} apiConfigs - An object containing the API configuration details
  * @param {Object} options - { status: 'active', operator: operatorId } //Not yet supported
  * @param {function} cb - A callback function to handle the response from the server
  * @param {Error} cb.err - An error object, if an error occurred.
@@ -350,6 +350,7 @@ function payBill(apiConfigs, options, cb) {
     network.send(Object.assign({}, apiConfigs, { contentType: 'application/json' }), {
         path: '/ekoapi/v2/billpayments/paybill?initiator_id='+initiatorId,
         method: 'POST',
+        requestHashSuffix: data.utility_acc_no + data.amount + data.user_code //a request identifier string that will be needed to create request_hash
     }, data, function(err, resultJson){
         /**
          * On success i.e. 200 status

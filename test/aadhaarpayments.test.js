@@ -29,11 +29,14 @@ describe('index.js', function() {
             "pipe": "0",
             "aadhar": "YrvFh+QFLmHXPjUWOXsDmFff0mRuAcCgazutSpBglgWuinHQMYzcBcO5tJ30vvxvyIXMb6d05l8j70cMpu7+96pG8n3Yla0/mVKQs4kIwqiFdJBAyox3oreZAhb6qilxjg7Apy6jSH6BMZwXUiRpFDaIZMb+cHXhCabeTzP1/fU=",
             "notify_customer": "0",
-            "piddata": "<?xml version=\"1.0\"?><PidData>\n  <Resp errCode=\"0\" errInfo=\"Success\"...</PidData>"
-         }
-        it('aadhaarPayments.pay('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
+            "piddata": '<?xml version=\"1.0\"?><PidData>\n  <Resp errCode=\"0\" errInfo=\"Success\"...</PidData>',
+            "source_ip":"121.121.1.1",
+            "latlong":"77.06794760,77.06794760"
+        }
+        it('aadhaar.pay('+JSON.stringify(validOptions)+', cb) should return valid data to the callback', function(done) {
             ekoApi.aadhaar.pay(validOptions, function(err, data){ 
                 try{
+                    expect(err).to.be.null;
                     expect(data).to.be.an('Object', 'Returned data is not an object')
                     assert.isNotNull(data)
                     expect(data).to.include.all.keys("tx_status", "transaction_date", "reason", "amount", "merchant_code", "shop", "fee", "sender_name", "tid", "auth_code", "shop_address_line1", "user_code", "service_tax", "totalfee", "merchantname", "stan", "aadhar", "customer_balance", "transaction_time", "comment", "bank_ref_num", "terminal_id")

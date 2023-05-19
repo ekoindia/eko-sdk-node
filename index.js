@@ -11,7 +11,9 @@ let EKO_API_CONFIGS = {
     authKey: "d2fe1d99-6298-4af2-8cc5-d97dcf46df30",
     // initiatorId: "9971771929",
     partnerUserCode: "20810200", //unique Eko code provided for your org
-    initiatorId: "9962981729"
+    initiatorId: "9962981729",
+    latlong: "77.06794760,77.06794760",
+    sourceIP: "121.121.1.1"
 }
 
 /**
@@ -63,8 +65,8 @@ const Eko = {
     },
     aadhaar: {
         pay: function(options, cb){
-            aadhaarPayments.pay(EKO_API_CONFIGS, options, function(err, aadhaarPayments){
-                return cb(err, aadhaarPayments);
+            aadhaarPayments.pay(EKO_API_CONFIGS, options, function(err, paymentReceipt){
+                return cb(err, paymentReceipt);
             })
         }
     },
@@ -108,6 +110,19 @@ function init(configs){
         billPayments.activateBBPSApi(EKO_API_CONFIGS, function(err, result){
             if(err){
                 console.log("Failed to activate BBPS API service for user_code:"+ EKO_API_CONFIGS.partnerUserCode)
+                console.debug(err)
+                // throw new Error("Error in enabling PAN verification API"); 
+            }
+        });
+    })
+    aadhaarPayments.isAePSServiceActive(EKO_API_CONFIGS, function(err, isActive){
+        if(isActive){
+            console.log("✔ AePS API service is activated already for user_code:"+ EKO_API_CONFIGS.partnerUserCode)
+            return;
+        }
+        aadhaarPayments.activateAePSApi(EKO_API_CONFIGS, function(err, result){
+            if(err){
+                console.log("Failed to activate AePS API service for user_code:"+ EKO_API_CONFIGS.partnerUserCode)
                 console.debug(err)
                 // throw new Error("Error in enabling PAN verification API"); 
             }

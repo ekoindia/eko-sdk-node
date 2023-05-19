@@ -3,12 +3,7 @@
  */
 exports.isAePSServiceActive = isAePSServiceActive;
 exports.activateAePSApi = activateAePSApi;
-exports.getOperators = getOperators;
-exports.getOperatorCategories = getOperatorCategories;
-exports.getOperatorLocations = getOperatorLocations;
-exports.getOperatorParameters = getOperatorParameters;
-exports.getBill = getBill;
-exports.payBill = payBill;
+exports.pay = pay;
 
 const network = require('./network');
 const services = require('./services')
@@ -53,8 +48,8 @@ function activateAePSApi(apiConfigs, cb) {
  * @param {string} [options.notify_customer=0] - Pass 1 if you want to send the SMS to the customer otherwise it will be 0
  * @param {string} options.aadhar - Encrypted value of aadhaar card number. For the encryption process please refer below.
  * @param {string} options.piddata - PID data returned in XML format of the biometric device needs to passed as string. To get device capture data in XML format, send pid format as 0 in the capture request body.
- * @param {string} options.latlong - latlong of the user from whom the request is coming. We are asking this details in case any fraud happens so please make sure to pass the valid location of the merchant's system.
- * @param {string} options.source_ip - IP of the merchant who is making the request. We are asking this details in case any fraud happens so please make sure to pass the valid IP of the merchant's system.
+ * @param {string} [options.latlong] - latlong of the user from whom the request is coming. We are asking this details in case any fraud happens so please make sure to pass the valid location of the merchant's system. Default value comes from EKO_API_CONFIGS.
+ * @param {string} [options.source_ip] - IP of the merchant who is making the request. We are asking this details in case any fraud happens so please make sure to pass the valid IP of the merchant's system. Default value comes from EKO_API_CONFIGS.
  * @param {string} options.service_type - Two Factor Registration
  * @param {number} options.service_ytype - Two Factor Authentication
  * @param {function} cb - A callback function to handle the response from the server
@@ -86,13 +81,29 @@ function activateAePSApi(apiConfigs, cb) {
     }
  */
 function pay(apiConfigs, options, cb) {
-    if(!options || !options.amount || !options.customer_id || !options.user_code || !options.client_ref_id || !options.bank_code || !options.notify_customer || !options.aadhar || !options.piddata || !options.latlong || !options.source_ip || !options.service_type){
-        return cb({ errorMessage: 'Missing some of the mandatory parameters among {amount, customer_id, user_code, client_ref_id, aadhar, piddata, source_ip, latlong }', errorCode: 'VALIDATION_ERROR' }, null)
+    if(!options || !options.amount || !options.customer_id || !options.user_code || !options.client_ref_id || !options.bank_code || !options.aadhar || !options.piddata || !options.service_type){
+        return cb({ errorMessage: 'Missing some of the mandatory parameters among {amount, customer_id, user_code, client_ref_id, bank_code, aadhar, piddata, source_ip, latlong }', errorCode: 'VALIDATION_ERROR' }, null)
     }
     const data = Object.assign({}, options);
-    if(data.hasOwnProperty('initiatorId')) {
-        delete data['initiatorId'];
-        data['initiator_id'] = apiConfigs.initiatorId;
+    if(!data.hasOwnProperty('initiator_id')) {
+        if(data.hasOwnProperty('initiatorId')) {
+            data['initiator_id'] = data['initiatorId'];
+            delete data['initiatorId'];
+        } else {
+            data['initiator_id'] = apiConfigs.initiatorId;
+        }
+    }
+    if(!data["latlong"]){
+        data["latlong"] = apiConfigs.latlong;
+    }
+    if(!data["source_ip"]){
+        data["source_ip"] = apiConfigs.sourceIP;
+    }
+    if(!data["notify_customer"]){
+        data["notify_customer"] = 0; //Default does not sends message
+    }
+    if(!data["pipe"]){
+        data["pipe"] = 0;
     }
     network.send(Object.assign({}, apiConfigs, { contentType: 'application/json' }), {
         path: '/ekoapi/v2/aeps',

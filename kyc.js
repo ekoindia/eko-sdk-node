@@ -16,7 +16,7 @@ const services = require('./services');
 function isPANServiceActive(apiConfigs, cb) {
     services.getServiceStatus(apiConfigs, null, function(err, statusReponse){
         if(statusReponse && statusReponse.service_status_list && statusReponse.length>0){
-            const statusObject = statusReponse.service_status_list.find((serviceStatusObject) => serviceStatusObject.service_code === "4");
+            const statusObject = statusReponse.service_status_list.find((serviceStatusObject) => serviceStatusObject.service_code == services.SERVICE_CODES["PAN"]);
             if(statusObject && statusObject.status_desc && statusObject.status_desc.toUpperCase()=="ACTIVATED"){
                 return cb(null, true)
             }
@@ -30,16 +30,8 @@ function isPANServiceActive(apiConfigs, cb) {
  * @param {*} cb 
  */
 function activatePANApi(apiConfigs, cb) {
-    const data = Object.assign({
-        service_code: 4,
-        initiator_id: apiConfigs.initiatorId,
-        user_code: apiConfigs.partnerUserCode
-    });
-    network.send(apiConfigs, {
-        path: '/ekoapi/v1/user/service/activate',
-        method: 'PUT'
-    }, data, function(err, resultJson){
-        cb(err, resultJson);
+    services.activateUserService(apiConfigs, { service: "pan" }, function(err, resultJson){
+        return cb(err, resultJson);
     })
 }
 

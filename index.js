@@ -1,14 +1,15 @@
 const kyc = require('./kyc');
+const billPayments = require('./billPayments');
 
 // Make sure to set these values via Eko.init(ekoApiConfigOptions) else default values will be used
 let EKO_API_CONFIGS = {
     hostname: "staging.eko.in",
-    port: 25004,
+    port: 8080,
     developerKey: "becbbce45f79c6f5109f848acd540567",
-    authKey: "f74c50a1-f705-4634-9cda-30a477df91b7",
-    initiatorId: "9971771929",
-    partnerUserCode: "20110001" //unique Eko code provided for your org
-    // initiatorId: "9962981729"
+    authKey: "d2fe1d99-6298-4af2-8cc5-d97dcf46df30",
+    // initiatorId: "9971771929",
+    partnerUserCode: "20810200", //unique Eko code provided for your org
+    initiatorId: "9962981729"
 }
 
 /**
@@ -18,7 +19,39 @@ const Eko = {
     init: init,
     verifyPAN: verifyPAN,
     verifyBankAccount: verifyBankAccount,
-    isPANServiceActive: isPANServiceActive
+    isPANServiceActive: isPANServiceActive,
+    billPayments: {
+        getOperators: function(options, cb){
+            billPayments.getOperators(EKO_API_CONFIGS, options, function(err, operatorList){
+                return cb(err, operatorList);
+            })
+        },
+        getOperatorCategories: function(options, cb){
+            billPayments.getOperatorCategories(EKO_API_CONFIGS, options, function(err, operatorCategoryList){
+                return cb(err, operatorCategoryList);
+            })
+        },
+        getOperatorLocations: function(options, cb){
+            billPayments.getOperatorLocations(EKO_API_CONFIGS, options, function(err, operatorLocationList){
+                return cb(err, operatorLocationList);
+            })
+        },
+        getOperatorParameters: function(options, cb){
+            billPayments.getOperatorParameters(EKO_API_CONFIGS, options, function(err, operatorParametersList){
+                return cb(err, operatorParametersList);
+            })
+        },
+        getBill: function(options, cb){
+            billPayments.getBill(EKO_API_CONFIGS, options, function(err, billInfo){
+                return cb(err, billInfo);
+            })
+        },
+        payBill: function(options, cb){
+            billPayments.payBill(EKO_API_CONFIGS, options, function(err, paymentReceipt){
+                return cb(err, paymentReceipt);
+            })
+        }
+    }
 }
 
 /**
@@ -40,10 +73,25 @@ function init(configs){
     console.debug("EKO API configs: ", JSON.stringify(EKO_API_CONFIGS, null, 4))
     isPANServiceActive(function(err, isActive){
         if(isActive){
+            console.log("✔ PAN API service is activated already for user_code:"+ EKO_API_CONFIGS.partnerUserCode)
             return;
         }
         kyc.activatePANApi(EKO_API_CONFIGS, function(err, result){
             if(err){
+                console.log("Failed to activate PAN API service for user_code:"+ EKO_API_CONFIGS.partnerUserCode)
+                console.debug(err)
+                // throw new Error("Error in enabling PAN verification API"); 
+            }
+        });
+    })
+    billPayments.isBBPSServiceActive(EKO_API_CONFIGS, function(err, isActive){
+        if(isActive){
+            console.log("✔ BBPS API service is activated already for user_code:"+ EKO_API_CONFIGS.partnerUserCode)
+            return;
+        }
+        billPayments.activateBBPSApi(EKO_API_CONFIGS, function(err, result){
+            if(err){
+                console.log("Failed to activate BBPS API service for user_code:"+ EKO_API_CONFIGS.partnerUserCode)
                 console.debug(err)
                 // throw new Error("Error in enabling PAN verification API"); 
             }

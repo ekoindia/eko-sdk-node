@@ -59,6 +59,67 @@ ekoApi.verifyBankAccount({
 })
 ```
 
+### Usage for Bill Payments related APIs
+
+**Get list of billing operators**
+```
+ekoApi.billPayments.getOperators({}, function(err, operatorList){ 
+    console.log(JSON.stringify(operatorList))
+}
+```
+
+**Get list of billing operator locations**
+```
+ekoApi.billPayments.getOperatorLocations({}, function(err, locations){ 
+    console.log(JSON.stringify(locations))
+}
+```
+
+**Get required parameters for a billing operator**
+```
+ekoApi.billPayments.getOperatorParameters({ operator: 1 }, function(err, parameterList){ 
+    console.log(JSON.stringify(parameterList))
+}
+```
+
+**Get bill**
+```
+ekoApi.billPayments.getBill({
+    initiatorId: 9962981729,
+    "operator_id":"51",
+    "user_code":"20810200",
+    "client_ref_id":"202105311125123456",
+    "utility_acc_no":"151627591",
+    "confirmation_mobile_no":"9999999999",
+    "sender_name":"Kaushik",
+    "source_ip":"121.121.1.1",
+    "latlong":"77.06794760,77.06794760",
+    "hc_channel" : 1 
+}, function(err, billInfo){ 
+    console.log(JSON.stringify(billInfo))
+}
+```
+
+**Pay bill**
+```
+ekoApi.billPayments.payBill({
+    initiatorId: 9962981729,
+    "source_ip":"121.121.1.1",
+    "user_code":"20810200",
+    "amount":"50" ,
+    "client_ref_id":"202105311125123456",
+    "utility_acc_no":"151627591",
+    "confirmation_mobile_no":"9999999999",
+    "sender_name":"Kaushik",
+    "operator_id":"1",
+    "latlong":"77.06794760,77.06794760",
+    "hc_channel" : 1 
+}, function(err, paymentInfo){ 
+    console.log(JSON.stringify(paymentInfo))
+}
+```
+
+
 ## Resources
 
 - [Eko Developers Community](https://github.com/ekoindia/eko-dev-community)

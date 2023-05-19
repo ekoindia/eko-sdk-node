@@ -1,10 +1,11 @@
 {
   "name": "@ekoindia/eko-sdk-node",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Access all financial services with simple to use APIs and SDK",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha test/index.test.js test/*/*.test.js"
+    "test": "./node_modules/.bin/mocha test/index.test.js test/*/*.test.js",
+    "coverage": "nyc npm run test"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "chai": "^4.3.7",
     "chai-http": "^4.3.0",
     "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
     "sinon": "^15.0.1"
   }
 }

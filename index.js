@@ -1,5 +1,7 @@
 const kyc = require('./kyc');
 const billPayments = require('./billPayments');
+const agentManager = require('./agentManager');
+const aadhaarPayments = require('./aadhaarPayments');
 
 // Make sure to set these values via Eko.init(ekoApiConfigOptions) else default values will be used
 let EKO_API_CONFIGS = {
@@ -20,6 +22,13 @@ const Eko = {
     verifyPAN: verifyPAN,
     verifyBankAccount: verifyBankAccount,
     isPANServiceActive: isPANServiceActive,
+    agent: {
+        onboard: function(options, cb){
+            agentManager.onboardAgent(EKO_API_CONFIGS, options, function(err, onboardedUserInfo){
+                return cb(err, onboardedUserInfo);
+            })
+        }
+    },
     billPayments: {
         getOperators: function(options, cb){
             billPayments.getOperators(EKO_API_CONFIGS, options, function(err, operatorList){
@@ -51,7 +60,14 @@ const Eko = {
                 return cb(err, paymentReceipt);
             })
         }
-    }
+    },
+    aadhaar: {
+        pay: function(options, cb){
+            aadhaarPayments.pay(EKO_API_CONFIGS, options, function(err, aadhaarPayments){
+                return cb(err, aadhaarPayments);
+            })
+        }
+    },
 }
 
 /**

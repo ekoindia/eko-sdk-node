@@ -5,7 +5,9 @@ exports.getServiceStatus = getServiceStatus;
 exports.activateUserService = activateUserService;
 const SERVICE_CODES = {
     PAN: 4,
-    BBPS: 53
+    BBPS: 53,
+    AEPS: 52,
+    AEPS_GATEWAY: 43
 }
 exports.SERVICE_CODES = SERVICE_CODES;
 

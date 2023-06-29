@@ -5,9 +5,12 @@ exports.send = send;
 exports.transformObjectToQueryParams = transformObjectToQueryParams;
 
 const auth = require('./auth');
-const https = require('https');
+var https = require('https');
 
 function send(apiConfigs, reqOptions, data, cb){
+    if(apiConfigs && apiConfigs.allowInsecureRequest){
+        https = require('http');
+    }
     let defaultRequestOptions = createDefaultRequestOptions(apiConfigs);
     // Add request_hash header if needed
     addRequestHashHeaderIfRequired(defaultRequestOptions, reqOptions);

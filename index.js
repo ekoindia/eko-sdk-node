@@ -5,6 +5,7 @@ const billPayments = require('./billPayments');
 let EKO_API_CONFIGS = {
     hostname: "staging.eko.in",
     port: 8080,
+    allowInsecureRequest: false,
     developerKey: "becbbce45f79c6f5109f848acd540567",
     authKey: "d2fe1d99-6298-4af2-8cc5-d97dcf46df30",
     // initiatorId: "9971771929",
@@ -56,16 +57,16 @@ const Eko = {
 
 /**
  * Initializes the api configurations and makes them immutable
- * @param {Object} options { host, port, developerKey, authKey, initiatorId, userCode }
+ * @param {Object} configs { host, port, developerKey, authKey, initiatorId, userCode }
  * @returns {Object} main Eko object
  */
 function init(configs){
     if(!configs){
         console.log("No Eko api configurations provided. Going to use the default ones for testing.")
     } else {
-        for(config of configs){
+        for(let key in configs){
             Object.defineProperty(EKO_API_CONFIGS, key, {
-                value: options[key],
+                value: configs[key],
                 writable: false
             })
         }

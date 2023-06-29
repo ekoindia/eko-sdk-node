@@ -6,13 +6,14 @@ exports.transformObjectToQueryParams = transformObjectToQueryParams;
 
 const auth = require('./auth');
 const https = require('https');
+const utility = require('./utility');
 
 function send(apiConfigs, reqOptions, data, cb){
     let defaultRequestOptions = createDefaultRequestOptions(apiConfigs);
     // Add request_hash header if needed
     addRequestHashHeaderIfRequired(defaultRequestOptions, reqOptions);
     //Override default request options if needed
-    let finalRequestOptions = Object.assign(defaultRequestOptions, reqOptions);
+    let finalRequestOptions = utility.deepMergeObjects(defaultRequestOptions, reqOptions);
     console.debug("Request OPTIONS: ");
     console.debug(JSON.stringify(finalRequestOptions, null, 4));
     const req = https.request(finalRequestOptions, (res) => {

@@ -68,6 +68,13 @@ ekoApi.billPayments.getOperators({}, function(err, operatorList){
 }
 ```
 
+**Get list of billing operator categories**
+```
+ekoApi.billPayments.getOperatorCategories({}, function(err, operatorCategoryList){ 
+    console.log(JSON.stringify(operatorCategoryList))
+}
+```
+
 **Get list of billing operator locations**
 ```
 ekoApi.billPayments.getOperatorLocations({}, function(err, locations){ 

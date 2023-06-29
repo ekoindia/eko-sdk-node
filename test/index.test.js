@@ -6,7 +6,7 @@ describe('index.js', function() {
     describe('#init()', function(){
         it('initializes SDK without error', function(done){
             try{
-                ekoApi = require('../index').init();
+                ekoApi = require('../index').init({ allowInsecureRequest: true });
                 done();
                 // setTimeout(() => {
                 //     done();
